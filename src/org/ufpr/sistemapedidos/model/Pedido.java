@@ -10,6 +10,9 @@ public class Pedido {
 	private Cliente cliente;
 	private List<ItemDoPedido> itens;
 
+	public Pedido() {
+	}
+
 	public Pedido(int id, Date data, Cliente cliente, List<ItemDoPedido> itens) {
 		this.id = id;
 		this.data = data;

@@ -7,6 +7,9 @@ public class Cliente {
 	private String nome;
 	private String sobreNome;
 
+	public Cliente() {
+	}
+
 	public Cliente(int id, String cpf, String nome, String sobreNome) {
 		this.id = id;
 		this.cpf = cpf;

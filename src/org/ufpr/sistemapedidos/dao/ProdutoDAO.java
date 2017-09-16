@@ -12,6 +12,10 @@ import org.ufpr.sistemapedidos.dao.generic.GenericDAO;
 import org.ufpr.sistemapedidos.model.Produto;
 import org.ufpr.sistemapedidos.util.ConnectionFactory;
 
+/**
+ * 
+ * @author Caio Calo
+ */
 public class ProdutoDAO implements GenericDAO<Produto> {
 	
 	private Connection conn;
