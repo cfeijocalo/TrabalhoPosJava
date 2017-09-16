@@ -1,5 +1,6 @@
 package org.ufpr.sistemapedidos.dao.generic;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -16,8 +17,9 @@ public interface GenericDAO<T> {
 	 * @author Caio Calo
 	 * @param id
 	 * @return entity
+	 * @throws SQLException 
 	 */
-	T selectById(Long id);
+	T selectById(Long id) throws SQLException;
 
 	/**
 	 * Busca todos que atendem a condição.
@@ -25,8 +27,9 @@ public interface GenericDAO<T> {
 	 * @author Caio Calo
 	 * @param condition
 	 * @return entity
+	 * @throws SQLException 
 	 */
-	List<T> selectAll(String condition);
+	List<T> selectAll(String condition) throws SQLException;
 
 	/**
 	 * Insere a entity no banco.
@@ -35,8 +38,9 @@ public interface GenericDAO<T> {
 	 * @param entity
 	 * @return <b>true</b> - se inserido com sucesso.<br>
 	 *         <b>false</b> - se houve algum problema na inserção.
+	 * @throws SQLException 
 	 */
-	boolean insert(T entity);
+	boolean insert(T entity) throws SQLException;
 
 	/**
 	 * Atualiza os dados no banco.
@@ -45,8 +49,9 @@ public interface GenericDAO<T> {
 	 * @param entity
 	 * @return <b>true</b> - se atualizado com sucesso.<br>
 	 *         <b>false</b> - se houve algum problema na atualização.
+	 * @throws SQLException 
 	 */
-	boolean update(T entity);
+	boolean update(T entity) throws SQLException;
 
 	/**
 	 * Remove a entity do banco.
@@ -55,7 +60,8 @@ public interface GenericDAO<T> {
 	 * @param entity
 	 * @return <b>true</b> - se removido com sucesso.<br>
 	 *         <b>false</b> - se houve algum problema na remoção.
+	 * @throws SQLException 
 	 */
-	boolean delete(T entity);
+	boolean delete(T entity) throws SQLException;
 
 }
