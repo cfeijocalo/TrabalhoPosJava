@@ -1,16 +1,16 @@
 package org.ufpr.sistemapedidos.model;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Pedido {
 
 	private int id;
 	private Date data;
 	private Cliente cliente;
-	private ArrayList<ItemDoPedido> itens;
+	private List<ItemDoPedido> itens;
 
-	public Pedido(int id, Date data, Cliente cliente, ArrayList<ItemDoPedido> itens) {
+	public Pedido(int id, Date data, Cliente cliente, List<ItemDoPedido> itens) {
 		this.id = id;
 		this.data = data;
 		this.cliente = cliente;
@@ -42,11 +42,11 @@ public class Pedido {
 		this.cliente = cliente;
 	}
 
-	public ArrayList<ItemDoPedido> getItens() {
+	public List<ItemDoPedido> getItens() {
 		return itens;
 	}
 
-	public void setItens(ArrayList<ItemDoPedido> itens) {
+	public void setItens(List<ItemDoPedido> itens) {
 		this.itens = itens;
 	}
 
