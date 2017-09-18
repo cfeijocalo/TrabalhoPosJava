@@ -25,7 +25,7 @@ public class ItemDoPedidoDAO implements GenericDAO<ItemDoPedido> {
 	@Override
 	public ItemDoPedido selectById(Long id) throws SQLException {
 		ItemDoPedido item = null;
-		String query = "";
+		String query = "SELECT * FROM item_pedido WHERE id = " + id + ";";
 
 		try {
 			conn = ConnectionFactory.create();
@@ -52,7 +52,11 @@ public class ItemDoPedidoDAO implements GenericDAO<ItemDoPedido> {
 	@Override
 	public List<ItemDoPedido> selectAll(String condition) throws SQLException {
 		List<ItemDoPedido> itens = new ArrayList<ItemDoPedido>();
-		String query = "";
+		String query = "SELECT * FROM item_pedido ";
+		
+		if (condition != null && !condition.isEmpty()) {
+			query = query.concat(condition);
+		}
 
 		try {
 			conn = ConnectionFactory.create();
@@ -77,21 +81,44 @@ public class ItemDoPedidoDAO implements GenericDAO<ItemDoPedido> {
 		return itens;
 	}
 
+	/**
+	 * <b>NÃO UTILIZAR!!!</b>
+	 */
+	@Deprecated
 	@Override
 	public boolean insert(ItemDoPedido entity) throws SQLException {
+		return false;
+	}
+	
+	/**
+	 * Insere a entity no banco, necessário o id do pedido.
+	 * 
+	 * @author Caio Calo
+	 * @param idPedido
+	 * @param entity
+	 * @return <b>true</b> - se inserido com sucesso.<br>
+	 *         <b>false</b> - se houve algum problema na inserção. 
+	 * @throws SQLException
+	 */
+	public boolean insert(int idPedido, ItemDoPedido entity) throws SQLException {
 		boolean result = false;
-		String query = "";
+		String query = "INSERT INTO item_pedido(id_pedido, id_produto, quantidade) VALUES (?, ?, ?);";
 
 		try {
 			conn = ConnectionFactory.create();
 			stmt = conn.prepareStatement(query);
 
+			stmt.setInt(1, idPedido);
+			stmt.setInt(2, entity.getProduto().getId());
+			stmt.setInt(3, entity.getQuantidade());
+			
 			if (stmt.execute()) {
 				result = true;
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			stmt.close();
 			conn.close();
@@ -99,10 +126,28 @@ public class ItemDoPedidoDAO implements GenericDAO<ItemDoPedido> {
 		return result;
 	}
 
+	/**
+	 * <b>NÃO UTILIZAR!!!</b>
+	 */
+	@Deprecated
 	@Override
 	public boolean update(ItemDoPedido entity) throws SQLException {
+		return false;
+	}
+	
+	/**
+	 * Atualiza os dados no banco, necessário passar o id do pedido.
+	 * 
+	 * @author Caio Calo
+	 * @param idPedido
+	 * @param entity
+	 * @return <b>true</b> - se atualizado com sucesso.<br>
+	 *         <b>false</b> - se houve algum problema na atualização. 
+	 * @throws SQLException
+	 */
+	public boolean update(int idPedido, ItemDoPedido entity) throws SQLException {
 		boolean result = false;
-		String query = "";
+		String query = "UPDATE item_pedido SET quantidade=? WHERE id_pedido = AND id_produto = ";
 
 		try {
 			conn = ConnectionFactory.create();
@@ -112,19 +157,37 @@ public class ItemDoPedidoDAO implements GenericDAO<ItemDoPedido> {
 				result = true;
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			stmt.close();
 			conn.close();
 		}
 		return result;
 	}
-
+	
+	/**
+	 * <b>NÃO UTILIZAR!!!</b>
+	 */
+	@Deprecated
 	@Override
 	public boolean delete(ItemDoPedido entity) throws SQLException {
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @author Caio Calo
+	 * @param idPedido
+	 * @param entity
+	 * @return <b>true</b> - se removido com sucesso.<br>
+	 *         <b>false</b> - se houve algum problema na remoção. 
+	 * @throws SQLException
+	 */
+	public boolean delete(int idPedido) throws SQLException {
 		boolean result = false;
-		String query = "";
+		String query = "DELETE FROM item_pedido WHERE id_pedido = " + idPedido +" ;";
 
 		try {
 			conn = ConnectionFactory.create();
@@ -134,8 +197,9 @@ public class ItemDoPedidoDAO implements GenericDAO<ItemDoPedido> {
 				result = true;
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			stmt.close();
 			conn.close();

@@ -25,7 +25,7 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 	@Override
 	public Cliente selectById(Long id) throws SQLException {
 		Cliente cliente = null;
-		String query = "";
+		String query = "SELECT * FROM cliente WHERE id = " + id + ";";
 
 		try {
 			conn = ConnectionFactory.create();
@@ -53,7 +53,11 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 	@Override
 	public List<Cliente> selectAll(String condition) throws SQLException {
 		List<Cliente> clientes = new ArrayList<Cliente>();
-		String query = "";
+		String query = "SELECT * FROM cliente ";
+		
+		if (condition != null && !condition.isEmpty()) {
+			query = query.concat(condition);
+		}
 
 		try {
 			conn = ConnectionFactory.create();
@@ -82,18 +86,23 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 	@Override
 	public boolean insert(Cliente entity) throws SQLException {
 		boolean result = false;
-		String query = "";
+		String query = "INSERT INTO cliente(cpf, nome, sobrenome) VALUES (?, ?, ?);";
 		
 		try {
 			conn = ConnectionFactory.create();
 			stmt = conn.prepareStatement(query);
 			
+			stmt.setString(1, entity.getCpf());
+			stmt.setString(2, entity.getNome());
+			stmt.setString(3, entity.getSobreNome());
+			
 			if (stmt.execute()) {
 				result = true;
 			}
 					
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			stmt.close();
 			conn.close();
@@ -104,18 +113,23 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 	@Override
 	public boolean update(Cliente entity) throws SQLException {
 		boolean result = false;
-		String query = "";
+		String query = "UPDATE cliente SET cpf=?, nome=?, sobrenome=? WHERE id = " + entity.getId() + ";";
 		
 		try {
 			conn = ConnectionFactory.create();
 			stmt = conn.prepareStatement(query);
 			
+			stmt.setString(1, entity.getCpf());
+			stmt.setString(2, entity.getNome());
+			stmt.setString(3, entity.getSobreNome());
+			
 			if (stmt.execute()) {
 				result = true;
 			}
 				
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			stmt.close();
 			conn.close();
@@ -126,7 +140,7 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 	@Override
 	public boolean delete(Cliente entity) throws SQLException {
 		boolean result = false;
-		String query = "";
+		String query = "DELETE FROM public.cliente WHERE id = " + entity.getId() + ";";
 		
 		try {
 			conn = ConnectionFactory.create();
@@ -136,12 +150,14 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 				result = true;
 			}
 				
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			stmt.close();
 			conn.close();
 		}
 		return result;
 	}
+	
 }

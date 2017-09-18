@@ -25,7 +25,7 @@ public class ProdutoDAO implements GenericDAO<Produto> {
 	@Override
 	public Produto selectById(Long id) throws SQLException {
 		Produto produto = null;
-		String query = "";
+		String query = "SELECT * FROM produto WHERE id = " + id + ";";
 
 		try {
 			conn = ConnectionFactory.create();
@@ -51,7 +51,11 @@ public class ProdutoDAO implements GenericDAO<Produto> {
 	@Override
 	public List<Produto> selectAll(String condition) throws SQLException {
 		List<Produto> produtos = new ArrayList<Produto>();
-		String query = "";
+		String query = "SELECT * FROM produto ";
+		
+		if (condition != null && !condition.isEmpty()) {
+			query = query.concat(condition);
+		}
 
 		try {
 			conn = ConnectionFactory.create();
@@ -78,18 +82,21 @@ public class ProdutoDAO implements GenericDAO<Produto> {
 	@Override
 	public boolean insert(Produto entity) throws SQLException {
 		boolean result = false;
-		String query = "";
+		String query = "INSERT INTO produto(descricao) VALUES (?);";
 		
 		try {
 			conn = ConnectionFactory.create();
 			stmt = conn.prepareStatement(query);
 			
+			stmt.setString(1, entity.getDescricao());
+			
 			if (stmt.execute()) {
 				result = true;
 			}
 				
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			stmt.close();
 			conn.close();
@@ -100,18 +107,21 @@ public class ProdutoDAO implements GenericDAO<Produto> {
 	@Override
 	public boolean update(Produto entity) throws SQLException {
 		boolean result = false;
-		String query = "";
+		String query = "UPDATE produto SET descricao=? WHERE id = " + entity.getId() + ";";
 		
 		try {
 			conn = ConnectionFactory.create();
 			stmt = conn.prepareStatement(query);
 			
+			stmt.setString(1, entity.getDescricao());
+			
 			if (stmt.execute()) {
 				result = true;
 			}
 				
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			stmt.close();
 			conn.close();
@@ -122,7 +132,7 @@ public class ProdutoDAO implements GenericDAO<Produto> {
 	@Override
 	public boolean delete(Produto entity) throws SQLException {
 		boolean result = false;
-		String query = "";
+		String query = "DELETE FROM produto WHERE id = " + entity.getId() + ";";
 		
 		try {
 			conn = ConnectionFactory.create();
@@ -132,8 +142,9 @@ public class ProdutoDAO implements GenericDAO<Produto> {
 				result = true;
 			}
 				
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			stmt.close();
 			conn.close();
