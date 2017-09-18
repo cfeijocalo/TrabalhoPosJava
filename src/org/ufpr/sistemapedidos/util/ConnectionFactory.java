@@ -1,8 +1,7 @@
 package org.ufpr.sistemapedidos.util;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,7 +15,7 @@ public class ConnectionFactory {
 
 	public static Connection create() throws SQLException, IOException {
 
-		FileInputStream file = new FileInputStream(new File("dados.properties"));
+		InputStream file = Thread.currentThread().getContextClassLoader().getResourceAsStream("resources/dados.properties");
 		Properties properties = new Properties();
 		properties.load(file);
 
